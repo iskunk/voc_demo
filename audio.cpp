@@ -13,14 +13,14 @@ static int callme( void * outputBuffer, void * inputBuffer, unsigned int numFram
     voc_demo_d *vd = (voc_demo_d *)data;
     SPFLOAT tmp;
 
-    for(i = 0; i < numFrames * 2; i+=2) {
+    for(i = 0; i < (int)numFrames * 2; i+=2) {
         if(sp_voc_get_counter(vd->voc) == 0) {
             if(vd->mode == VOC_TONGUE) {
                 sp_voc_set_tongue_shape(vd->voc,
                         vd->tongue_pos, vd->tongue_diam);
             }
         }
-        sp_voc_compute(vd->sp, vd->voc, &tmp);
+        sp_voc_compute(&vd->sp, vd->voc, &tmp);
         tmp *= vd->gain;
         output[i] = tmp;
         output[i + 1] = tmp;
@@ -51,10 +51,9 @@ void voc_demo_setup(voc_demo_d *vd)
             &buffer_frames, &callme, vd, &options);
     audio.showWarnings( true );
 
-    sp_create(&vd->sp);
-    vd->sp->sr = info.preferredSampleRate;
+    vd->sp.sr = info.preferredSampleRate;
     sp_voc_create(&vd->voc);
-    sp_voc_init(vd->sp, vd->voc);
+    sp_voc_init(&vd->sp, vd->voc);
     vd->tract = sp_voc_get_tract_diameters(vd->voc);
     vd->tract_size= sp_voc_get_tract_size(vd->voc);
     vd->freq = sp_voc_get_frequency_ptr(vd->voc);
@@ -79,7 +78,6 @@ void voc_demo_stop(voc_demo_d *vd)
 void voc_demo_destroy(voc_demo_d *vd)
 {
     sp_voc_destroy(&vd->voc);
-    sp_destroy(&vd->sp);
 }
 
 }

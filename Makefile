@@ -1,12 +1,12 @@
 BIN = voc_demo
 
-CFLAGS += -std=c99 -pedantic -O2 -Inuklear -g
-CXXFLAGS += -Irtaudio
+CFLAGS += -std=c99 -pedantic -O2 -g -Inuklear -Ivoc
+CXXFLAGS += -O2 -g -Irtaudio -Ivoc
 CONFIG ?=
 
 include $(CONFIG)
 
-OBJ = main.o rtaudio/RtAudio.o audio.o
+OBJ = main.o rtaudio/RtAudio.o audio.o voc/voc.o
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Darwin)
@@ -16,8 +16,8 @@ CFLAGS+=-D__MACOSX_CORE__
 LIBS +=-framework CoreAudio -framework CoreMIDI -framework CoreFoundation \
 	-framework IOKit -framework Carbon  -framework OpenGL \
 	-framework GLUT -framework Foundation \
-	-framework AppKit -lstdc++ -lm -L/usr/local/lib
-LIBS += -lglfw -framework Cocoa -framework CoreVideo -lm -lsoundpipe -lsndfile
+	-framework AppKit -L/usr/local/lib
+LIBS += -lglfw -framework Cocoa -framework CoreVideo -lm
 CXXFLAGS += -I/usr/local/include
 CFLAGS += -I/usr/local/include
 
@@ -25,8 +25,15 @@ CFLAGS += -I/usr/local/include
 CFLAGS += -I/opt/local/include -L/opt/local/lib
 else
 CXX=g++
+
+ifeq ($(UNAME), Linux)
+CXXFLAGS += -D__LINUX_ALSA__
+LIBS += -lasound
+else
 CXXFLAGS += -D__UNIX_JACK__
-LIBS += -lstdc++ -ljack -lsoundpipe -lsndfile
+LIBS += -ljack
+endif
+
 LIBS += -lglfw -lGL -lm -lGLU -lpthread
 endif
 
@@ -38,7 +45,7 @@ endif
 	$(CXX) -c $< $(CXXFLAGS) -o $@
 
 $(BIN): $(OBJ)
-	$(CC) $(OBJ) $(CFLAGS) -o $(BIN) $(LIBS)
+	$(CXX) $(OBJ) $(CXXFLAGS) -o $(BIN) $(LIBS)
 
 clean:
 	rm -rf $(BIN)

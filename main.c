@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
             NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
         {
             nk_layout_row_static(ctx, 30, 200, 1);
-            for(i = 0; i < vd.tract_size; i++) {
+            for(i = 0; i < (int)vd.tract_size; i++) {
                 nk_slider_float(ctx, 0, &vd.tract[i], 3.5, 0.01);
             }
         }

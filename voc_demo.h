@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <soundpipe.h>
+#include <voc.h>
 
 enum {
 VOC_NONE,
@@ -13,7 +14,7 @@ VOC_TONGUE
 };
 
 typedef struct {
-    sp_data *sp;
+    sp_data sp;
     sp_voc *voc;
     SPFLOAT *tract;
     SPFLOAT *freq;
