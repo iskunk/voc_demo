@@ -10,7 +10,7 @@ extern "C" {
 enum {
 VOC_NONE,
 VOC_TONGUE
-}; 
+};
 
 typedef struct {
     sp_data *sp;

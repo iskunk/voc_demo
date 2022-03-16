@@ -16,7 +16,7 @@ static int callme( void * outputBuffer, void * inputBuffer, unsigned int numFram
     for(i = 0; i < numFrames * 2; i+=2) {
         if(sp_voc_get_counter(vd->voc) == 0) {
             if(vd->mode == VOC_TONGUE) {
-                sp_voc_set_tongue_shape(vd->voc, 
+                sp_voc_set_tongue_shape(vd->voc,
                         vd->tongue_pos, vd->tongue_diam);
             }
         }
@@ -25,15 +25,15 @@ static int callme( void * outputBuffer, void * inputBuffer, unsigned int numFram
         output[i] = tmp;
         output[i + 1] = tmp;
     }
-    
+
     return 0;
 }
 
 void voc_demo_setup(voc_demo_d *vd)
 {
     unsigned int buffer_frames = 1024;
-   
-    RtAudio::DeviceInfo info; 
+
+    RtAudio::DeviceInfo info;
     RtAudio::StreamParameters iParams, oParams;
     info = audio.getDeviceInfo(audio.getDefaultOutputDevice());
     iParams.deviceId = audio.getDefaultInputDevice();
@@ -42,12 +42,12 @@ void voc_demo_setup(voc_demo_d *vd)
     oParams.deviceId = audio.getDefaultOutputDevice();
     oParams.nChannels = 2;
     oParams.firstChannel = 0;
-    
+
     RtAudio::StreamOptions options;
-    
-  
-    audio.openStream( &oParams, NULL, 
-            RTAUDIO_FLOAT32, info.preferredSampleRate, 
+
+
+    audio.openStream( &oParams, NULL,
+            RTAUDIO_FLOAT32, info.preferredSampleRate,
             &buffer_frames, &callme, vd, &options);
     audio.showWarnings( true );
 

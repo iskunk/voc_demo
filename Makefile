@@ -1,18 +1,18 @@
 BIN = voc_demo
 
 CFLAGS += -std=c99 -pedantic -O2 -Inuklear -g
-CXXFLAGS += -Irtaudio 
+CXXFLAGS += -Irtaudio
 CONFIG ?=
 
 include $(CONFIG)
 
-OBJ = main.o rtaudio/RtAudio.o audio.o 
+OBJ = main.o rtaudio/RtAudio.o audio.o
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Darwin)
 CXX=clang++
-CXXFLAGS+=-D__MACOSX_CORE__ 
-CFLAGS+=-D__MACOSX_CORE__ 
+CXXFLAGS+=-D__MACOSX_CORE__
+CFLAGS+=-D__MACOSX_CORE__
 LIBS +=-framework CoreAudio -framework CoreMIDI -framework CoreFoundation \
 	-framework IOKit -framework Carbon  -framework OpenGL \
 	-framework GLUT -framework Foundation \
@@ -25,7 +25,7 @@ CFLAGS += -I/usr/local/include
 CFLAGS += -I/opt/local/include -L/opt/local/lib
 else
 CXX=g++
-CXXFLAGS += -D__UNIX_JACK__ 
+CXXFLAGS += -D__UNIX_JACK__
 LIBS += -lstdc++ -ljack -lsoundpipe -lsndfile
 LIBS += -lglfw -lGL -lm -lGLU -lpthread
 endif
